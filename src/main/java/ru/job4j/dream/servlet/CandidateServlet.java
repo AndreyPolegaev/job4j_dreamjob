@@ -8,6 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * doGet() - достает всех кандидатов из хранилища
+ * форвард на candidates.jsp
+ */
+
 public class CandidateServlet extends HttpServlet {
 
     @Override
