@@ -1,11 +1,10 @@
 package ru.job4j.dream.servlet;
 
-import ru.job4j.dream.store.Store;
+import ru.job4j.dream.store.MemStore;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,7 +20,7 @@ public class DeleteCandidate extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws
             ServletException, IOException {
-        Store.instOf().deleteCandidate(Integer.parseInt(req.getParameter("id")));
+        MemStore.instOf().deleteCandidate(Integer.parseInt(req.getParameter("id")));
         Files.delete(Path.of("C:\\images\\" + req.getParameter("id") + "." + "jpg"));
         doGet(req, resp);
     }
