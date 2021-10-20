@@ -168,7 +168,7 @@ public class PsqlStore implements Store {
     public Candidate findCandidateById(int id) {
         Candidate rsl = null;
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("SELECT * FROM candidates where id = (?)");
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM candidates where id = (?)")
         ) {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
@@ -180,6 +180,18 @@ public class PsqlStore implements Store {
             LOG.debug("Exception in PsqlStore", e);
         }
         return rsl;
+    }
+
+    @Override
+    public void deleteCandidate(int id) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("DELETE FROM candidates where id = (?)")
+        ) {
+            ps.setInt(1, id);
+            ps.execute();
+        } catch (Exception e) {
+            LOG.debug("Exception in PsqlStore", e);
+        }
     }
 
     @Override

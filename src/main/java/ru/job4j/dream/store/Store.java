@@ -17,4 +17,6 @@ public interface Store {
     Post findById(int id);
 
     Candidate findCandidateById(int id);
+
+    void deleteCandidate(int id);
 }
