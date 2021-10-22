@@ -3,6 +3,7 @@
 <%@ page import="ru.job4j.dream.model.Post" %>
 <%@ page import="ru.job4j.dream.model.Candidate" %>
 <%@ page import="ru.job4j.dream.store.PsqlStore" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -23,7 +24,6 @@
     <title>Работа мечты</title>
 </head>
 <body>
-
 <%
 String id = request.getParameter("id");
 Candidate candidate = new Candidate(0, "");
@@ -32,6 +32,7 @@ if (id != null) {
 }
 %>
 <div class="container pt-3">
+    <jsp:include page="/menu.jsp"/>
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">

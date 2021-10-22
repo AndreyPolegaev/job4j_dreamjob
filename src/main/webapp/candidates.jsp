@@ -28,7 +28,7 @@
 </head>
 <body>
 <div class="container pt-3">
-
+    <jsp:include page="/menu.jsp"/>
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
@@ -49,8 +49,10 @@
                                 </a>
                                     <c:out value="${candidate.name}"/>
                             <td>
-                                <img src="<c:url value='/download?name=${candidate.id}'/>" width="130px" height="130px"/>
-                                <form action=${pageContext.request.contextPath}/PhotoUpload.jsp?id=${candidate.id} method="post">
+                                <img src="<c:url value='/download?name=${candidate.id}'/>" width="130px"
+                                     height="130px"/>
+                                <form action=${pageContext.request.contextPath}/PhotoUpload.jsp?id=${candidate.id}
+                                      method="post">
                                     <button type="submit" class="btn btn-default">Сохранить</button>
                                 </form>
                                 <form action=${pageContext.request.contextPath}/delete?id=${candidate.id} method="post">
