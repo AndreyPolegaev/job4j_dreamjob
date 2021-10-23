@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
+import ru.job4j.dream.model.User;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.sql.Connection;
@@ -210,6 +212,31 @@ public class PsqlStore implements Store {
             LOG.debug("Exception in PsqlStore", e);
         }
         return rsl;
+    }
+
+    @Override
+    public void save(User user) {
+
+    }
+
+    @Override
+    public Collection<User> findAllUsers() {
+        return null;
+    }
+
+    @Override
+    public User findUserById() {
+        return null;
+    }
+
+    @Override
+    public User findUserByName() {
+        return null;
+    }
+
+    @Override
+    public User findUserByNEmail() {
+        return null;
     }
 }
 
