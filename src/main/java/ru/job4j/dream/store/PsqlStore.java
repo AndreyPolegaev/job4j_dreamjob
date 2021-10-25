@@ -200,7 +200,7 @@ public class PsqlStore implements Store {
     public Post findById(int id) {
         Post rsl = null;
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("SELECT * FROM post where id = (?)");
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM post where id = (?)")
         ) {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
@@ -243,7 +243,6 @@ public class PsqlStore implements Store {
             ps.setString(1, email);
             try (ResultSet resultSet = ps.executeQuery()) {
                 if (resultSet.next()) {
-                    email = resultSet.getString("email");
                     return new User(
                             resultSet.getInt("id"),
                             resultSet.getString("name"),
