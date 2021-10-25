@@ -23,11 +23,5 @@ public interface Store {
 
     void save(User user);
 
-    Collection<User> findAllUsers();
-
-    User findUserById();
-
-    User findUserByName();
-
-    User findUserByNEmail();
+    User findUserByEmail(String email);
 }

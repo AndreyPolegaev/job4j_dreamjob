@@ -201,7 +201,7 @@ public class PsqlStore implements Store {
         Post rsl = null;
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement("SELECT * FROM post where id = (?)");
-             ) {
+        ) {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
                 if (it.next()) {
@@ -216,26 +216,45 @@ public class PsqlStore implements Store {
 
     @Override
     public void save(User user) {
-
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement(
+                     "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
+                     PreparedStatement.RETURN_GENERATED_KEYS)
+        ) {
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.execute();
+            try (ResultSet id = ps.getGeneratedKeys()) {
+                if (id.next()) {
+                    user.setId(id.getInt(1));
+                }
+            }
+        } catch (Exception e) {
+            LOG.debug("Exception in PsqlStore save User method", e);
+        }
     }
 
     @Override
-    public Collection<User> findAllUsers() {
-        return null;
-    }
-
-    @Override
-    public User findUserById() {
-        return null;
-    }
-
-    @Override
-    public User findUserByName() {
-        return null;
-    }
-
-    @Override
-    public User findUserByNEmail() {
+    public User findUserByEmail(String email) {
+        try (Connection cn = pool.getConnection();
+        PreparedStatement ps = cn.prepareStatement("SELECT *from users WHERE email = (?)")
+        ) {
+            ps.setString(1, email);
+            try (ResultSet resultSet = ps.executeQuery()) {
+                if (resultSet.next()) {
+                    email = resultSet.getString("email");
+                    return new User(
+                            resultSet.getInt("id"),
+                            resultSet.getString("name"),
+                            resultSet.getString("email"),
+                            resultSet.getString("password")
+                    );
+                }
+            }
+        } catch (Exception e) {
+            LOG.debug("Exception in PsqlStore findUserByNEmail method", e);
+        }
         return null;
     }
 }
