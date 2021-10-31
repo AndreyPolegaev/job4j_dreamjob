@@ -6,12 +6,12 @@ import org.slf4j.LoggerFactory;
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
 import ru.job4j.dream.model.User;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -23,10 +23,14 @@ public class PsqlStore implements Store {
 
     private final BasicDataSource pool = new BasicDataSource();
 
+    /**
+     * new FileReader("db.properties") - работа с Postgres
+     * new FileReader("./src/test/resources/db.properties") - работа с h2 для тестирования
+     */
     private PsqlStore() {
         Properties cfg = new Properties();
         try (BufferedReader io = new BufferedReader(
-                new FileReader("db.properties")
+                new FileReader("./src/test/resources/db.properties")
         )) {
             cfg.load(io);
         } catch (Exception e) {
@@ -44,6 +48,13 @@ public class PsqlStore implements Store {
         pool.setMinIdle(5);
         pool.setMaxIdle(10);
         pool.setMaxOpenPreparedStatements(100);
+    }
+
+    /**
+     * Вернуть pool для класса тестирования
+     */
+    public BasicDataSource getPool() {
+        return pool;
     }
 
     private static final class Lazy {
