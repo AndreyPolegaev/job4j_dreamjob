@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            padding: 30px;
+            background-image: url('https://phonoteka.org/uploads/posts/2021-04/1618959233_33-phonoteka_org-p-stilnii-gradient-fon-35.jpg');
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    </style>
+</head>
+<body>
+<div class="row">
+    <div class="col-md-2">
+        <form>
+            <div class="form-group">
+                <input type="text" class="form-control" id="name" aria-describedby="emailHelp" placeholder="Имя">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" id="surname" placeholder="Фамилия">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" id="sex" placeholder="Пол">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" id="description" placeholder="Описание">
+            </div>
+            <button type="submit" class="btn btn-success">Готово</button>
+            <br>
+        </form>
+    </div>
+</div>
+<br><br>
+<div class="row">
+    <div class="col-md-4">
+        <table class="table">
+            <thead class="thead-white">
+            <tr>
+                <th scope="col">№</th>
+                <th scope="col">Имя</th>
+                <th scope="col">Фамилия</th>
+                <th scope="col">Пол</th>
+                <th scope="col">Описание</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>Петр</td>
+                <td>Арсентьев</td>
+                <td>Муж</td>
+                <td>Серьезный</td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>Станислав</td>
+                <td>Коробейников</td>
+                <td>Муж</td>
+                <td>Топ</td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td>Раиль</td>
+                <td>Шамсемухаметов</td>
+                <td>Муж</td>
+                <td>Топ</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
