@@ -15,24 +15,40 @@
             background-position: center;
         }
     </style>
+    <script>
+        function validate() {
+
+            let name = $('#name');
+            let surname = $('#surname');
+            let sex = $('#sex');
+            let description = $('#description');
+            let array = [name, surname, sex, description];
+            for (let i = 0; i < array.length; i++) {
+                if (array[i].val() == '') {
+                    alert(array[i].attr('title') + " не заполнено");
+                }
+            }
+            return false;
+        }
+    </script>
 </head>
 <body>
 <div class="row">
     <div class="col-md-2">
         <form>
             <div class="form-group">
-                <input type="text" class="form-control" id="name" aria-describedby="emailHelp" placeholder="Имя">
+                <input type="text" class="form-control" id="name" aria-describedby="emailHelp" placeholder="Имя" title="имя">
             </div>
             <div class="form-group">
-                <input type="text" class="form-control" id="surname" placeholder="Фамилия">
+                <input type="text" class="form-control" id="surname" placeholder="Фамилия" title="фамилия">
             </div>
             <div class="form-group">
-                <input type="text" class="form-control" id="sex" placeholder="Пол">
+                <input type="text" class="form-control" id="sex" placeholder="Пол" title="пол">
             </div>
             <div class="form-group">
-                <input type="text" class="form-control" id="description" placeholder="Описание">
+                <input type="text" class="form-control" id="description" placeholder="Описание" title="описание">
             </div>
-            <button type="submit" class="btn btn-success">Готово</button>
+            <button type="submit" class="btn btn-success" onclick="return validate();">Готово</button>
             <br>
         </form>
     </div>
