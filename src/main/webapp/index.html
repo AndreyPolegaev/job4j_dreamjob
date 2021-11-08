@@ -16,8 +16,27 @@
         }
     </style>
     <script>
+        /**
+         * получаем значение полTQ
+         * получаем ссылку на последний элемент в таблице.
+         и после него добавляем html СТРОКУ
+         */
+        function addRow() {
+            const name = $('#name').val();
+            const surname = $('#surname').val();
+            const sex = $('#sex').val();
+            const description = $('#description').val();
+            $('.table tr:last')
+                .after(
+                    '<tr>' +
+                    '<td>' + name + '</td>' +
+                    '<td>' + surname + '</td>' +
+                    '<td>' + sex + '</td>' +
+                    '<td>' + description + '</td>' +
+                    '</tr>'
+                );
+        }
         function validate() {
-
             let name = $('#name');
             let surname = $('#surname');
             let sex = $('#sex');
@@ -37,7 +56,8 @@
     <div class="col-md-2">
         <form>
             <div class="form-group">
-                <input type="text" class="form-control" id="name" aria-describedby="emailHelp" placeholder="Имя" title="имя">
+                <input type="text" class="form-control" id="name" aria-describedby="emailHelp" placeholder="Имя"
+                       title="имя">
             </div>
             <div class="form-group">
                 <input type="text" class="form-control" id="surname" placeholder="Фамилия" title="фамилия">
@@ -49,6 +69,7 @@
                 <input type="text" class="form-control" id="description" placeholder="Описание" title="описание">
             </div>
             <button type="submit" class="btn btn-success" onclick="return validate();">Готово</button>
+            <button type="button" class="btn btn-success" onclick="addRow()">Добавить запись</button>
             <br>
         </form>
     </div>
@@ -59,7 +80,6 @@
         <table class="table">
             <thead class="thead-white">
             <tr>
-                <th scope="col">№</th>
                 <th scope="col">Имя</th>
                 <th scope="col">Фамилия</th>
                 <th scope="col">Пол</th>
@@ -68,21 +88,18 @@
             </thead>
             <tbody>
             <tr>
-                <th scope="row">1</th>
                 <td>Петр</td>
                 <td>Арсентьев</td>
                 <td>Муж</td>
                 <td>Серьезный</td>
             </tr>
             <tr>
-                <th scope="row">2</th>
                 <td>Станислав</td>
                 <td>Коробейников</td>
                 <td>Муж</td>
                 <td>Топ</td>
             </tr>
             <tr>
-                <th scope="row">3</th>
                 <td>Раиль</td>
                 <td>Шамсемухаметов</td>
                 <td>Муж</td>
