@@ -3,6 +3,7 @@ package ru.job4j.dream.store;
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,9 +21,19 @@ public class MemStore {
     private final Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
 
     private MemStore() {
-        posts.put(1, new Post(1, "Junior Java Job", "description Junior Java", LocalDate.now()));
-        posts.put(2, new Post(2, "Middle Java Job", "description Middle Java", LocalDate.now()));
-        posts.put(3, new Post(3, "Senior Java Job", "description Senior Java", LocalDate.now()));
+        posts.put(1, new Post(
+                1,
+                "Junior Java Job",
+                "description Junior Java", LocalDateTime.now())
+        );
+        posts.put(2, new Post(
+                2,
+                "Middle Java Job",
+                "description Middle Java", LocalDateTime.now()));
+        posts.put(3, new Post(
+                3,
+                "Senior Java Job",
+                "description Senior Java", LocalDateTime.now()));
         candidates.put(1, new Candidate(1, "Junior Java"));
         candidates.put(2, new Candidate(2, "Middle Java"));
         candidates.put(3, new Candidate(3, "Senior Java"));

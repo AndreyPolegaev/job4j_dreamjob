@@ -3,11 +3,13 @@ package ru.job4j.dream.store;
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
 
+import java.time.LocalDateTime;
+
 public class PsqlMain {
     public static void main(String[] args) {
         Store store = PsqlStore.instOf();
-        store.save(new Post(0, "Java Job"));
-        store.save(new Post(1, "Python Job"));
+        store.save(new Post(0, "Java Job", LocalDateTime.now()));
+        store.save(new Post(1, "Python Job", LocalDateTime.now()));
         for (Post post : store.findAllPosts()) {
             System.out.println(post.getId() + " " + post.getName());
         }

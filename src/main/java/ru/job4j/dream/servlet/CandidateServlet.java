@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 /**
  * doGet() - достает всех кандидатов из хранилища
@@ -27,8 +28,10 @@ public class CandidateServlet extends HttpServlet {
             ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         PsqlStore.instOf().save(new Candidate(
-                Integer.valueOf(req.getParameter("id")),
-                req.getParameter("name")));
+                Integer.parseInt(req.getParameter("id")),
+                req.getParameter("name"),
+                Integer.parseInt(req.getParameter("city")),
+                LocalDateTime.now()));
         resp.sendRedirect(req.getContextPath() + "/candidates.do");
     }
 }

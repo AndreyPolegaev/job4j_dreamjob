@@ -9,6 +9,7 @@ import ru.job4j.dream.store.Store;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.*;
@@ -21,7 +22,6 @@ public class DbStoreTest {
     /**
      * метод выполняется после каждого теста - очистка таблиц.
      */
-
     @After
     public void wipeTable() throws SQLException {
         try (Connection cn = PsqlStore.instOf().getPool().getConnection();
@@ -56,7 +56,7 @@ public class DbStoreTest {
     @Test
     public void whenSaveUserThenFindById() {
         Store store = PsqlStore.instOf();
-        Post post = new Post(0, "Java Job");
+        Post post = new Post(0, "Java Job", LocalDateTime.now());
         store.save(post);
         Post postInDb = store.findById(post.getId());
         assertThat(postInDb.getName(), is(post.getName()));
@@ -65,7 +65,7 @@ public class DbStoreTest {
     @Test
     public void whenFindPostsById() {
         Store store = PsqlStore.instOf();
-        Post post = new Post(0, "Java Job");
+        Post post = new Post(0, "Java Job", LocalDateTime.now());
         store.save(post);
         Post postInDb = store.findById(post.getId());
         assertThat(postInDb, is(post));
@@ -111,8 +111,8 @@ public class DbStoreTest {
     @Test
     public void whenFindAllPosts() {
         Store store = PsqlStore.instOf();
-        Post p1 = new Post(0, "Post1");
-        Post p2 = new Post(0, "Post1");
+        Post p1 = new Post(0, "Post1", LocalDateTime.now());
+        Post p2 = new Post(0, "Post1", LocalDateTime.now());
         store.save(p1);
         store.save(p2);
         List<Post> posts = (List) store.findAllPosts();
@@ -124,7 +124,7 @@ public class DbStoreTest {
     @Test
     public void whenUpdatePost() {
         Store store = PsqlStore.instOf();
-        Post p1 = new Post(0, "Post1");
+        Post p1 = new Post(0, "Post1", LocalDateTime.now());
         store.save(p1);
         p1.setName("Changed Name");
         store.save(p1);

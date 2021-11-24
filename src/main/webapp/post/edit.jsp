@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="ru.job4j.dream.store.PsqlStore" %>
 <%@ page import="ru.job4j.dream.model.Post" %>
+<%@ page import="java.time.LocalDateTime" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!doctype html>
 <html lang="en">
@@ -20,15 +21,19 @@
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
     <title>Работа мечты</title>
+
+
 </head>
 <body>
+
 <%
     String id = request.getParameter("id");
-    Post post = new Post(0, "");
+    Post post = new Post(0, "", LocalDateTime.now());
     if (id != null) {
         post = PsqlStore.instOf().findById(Integer.valueOf(id));
     }
 %>
+
 <div class="container pt-3">
     <jsp:include page="/menu.jsp"/>
     <div class="row">
@@ -48,7 +53,9 @@
                         <input type="text" class="form-control" name="name" value="<%=post.getName()%>">
                     </div>
                     <button type="submit" class="btn btn-primary">Сохранить</button>
+
                 </form>
+
             </div>
         </div>
     </div>

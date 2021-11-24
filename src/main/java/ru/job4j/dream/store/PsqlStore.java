@@ -4,18 +4,23 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.dream.model.Candidate;
+import ru.job4j.dream.model.City;
 import ru.job4j.dream.model.Post;
 import ru.job4j.dream.model.User;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
+
+/**
+ * @author Andrey Polegaev
+ * @version 1.0
+ * Methods for data base - dream job. CRUD operations.
+ */
 
 public class PsqlStore implements Store {
 
@@ -30,7 +35,7 @@ public class PsqlStore implements Store {
     private PsqlStore() {
         Properties cfg = new Properties();
         try (BufferedReader io = new BufferedReader(
-                new FileReader("./src/test/resources/db.properties")
+                new FileReader("db.properties")
         )) {
             cfg.load(io);
         } catch (Exception e) {
@@ -73,13 +78,38 @@ public class PsqlStore implements Store {
         ) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
-                    posts.add(new Post(it.getInt("id"), it.getString("name")));
+                    posts.add(new Post(
+                            it.getInt("id"),
+                            it.getString("name"),
+                            it.getTimestamp("time").toLocalDateTime()));
                 }
             }
         } catch (Exception e) {
             LOG.debug("Exception in PsqlStore", e);
         }
         return posts;
+    }
+
+    /**
+     * извлечь список городов (города добавляются при создании схемы таблицы)
+     */
+    @Override
+    public List<City> findAllCities() {
+        List<City> cities = new ArrayList<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM cities")) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    cities.add(new City(
+                            it.getInt("id"),
+                            it.getString("name")
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            LOG.debug("Exception in PsqlStore", e);
+        }
+        return cities;
     }
 
     @Override
@@ -96,6 +126,49 @@ public class PsqlStore implements Store {
             LOG.debug("Exception in PsqlStore", e);
         }
         return candidates;
+    }
+
+    /**
+     * @return List<Candidate> кандидаты, добавленные за последние сутки
+     */
+    @Override
+    public List<Candidate> currentCandidates() {
+        List<Candidate> currentCandidates = new ArrayList<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement(
+             "SELECT * FROM candidates where time BETWEEN NOW() - INTERVAL '24 HOURS' AND NOW()")) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    currentCandidates.add(new Candidate(it.getInt("id"), it.getString("name")));
+                }
+            }
+        } catch (Exception e) {
+            LOG.debug("Exception in PsqlStore", e);
+        }
+        return currentCandidates;
+    }
+
+    /**
+     * @return List<Post> вакансии, добавленные за последние сутки
+     */
+    @Override
+    public List<Post> currentPost() {
+        List<Post> currentPost = new ArrayList<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement(
+              "SELECT * FROM post where time BETWEEN NOW() - INTERVAL '24 HOURS' AND NOW()")) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    currentPost.add(new Post(
+                            it.getInt("id"),
+                            it.getString("name"),
+                            it.getTimestamp("time").toLocalDateTime()));
+                }
+            }
+        } catch (Exception e) {
+            LOG.debug("Exception in PsqlStore", e);
+        }
+        return currentPost;
     }
 
     @Override
@@ -116,12 +189,15 @@ public class PsqlStore implements Store {
         }
     }
 
-    private Candidate create(Candidate candidate) {
+    @Override
+    public Candidate create(Candidate candidate) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("INSERT INTO candidates (name) VALUES (?)",
-                     PreparedStatement.RETURN_GENERATED_KEYS)
-        ) {
+             PreparedStatement ps = cn.prepareStatement(
+                     "INSERT INTO candidates (name, time, city_fk) VALUES (?, ?, ?)",
+                     PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, candidate.getName());
+            ps.setTimestamp(2, candidate.getCreated());
+            ps.setInt(3, candidate.getCityId());
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -149,10 +225,11 @@ public class PsqlStore implements Store {
 
     private Post create(Post post) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("INSERT INTO post (name) VALUES (?)",
+          PreparedStatement ps = cn.prepareStatement("INSERT INTO post (name, time) VALUES (?, ?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, post.getName());
+            ps.setTimestamp(2, Timestamp.valueOf(post.getCreated()));
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -216,7 +293,11 @@ public class PsqlStore implements Store {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
                 if (it.next()) {
-                    rsl = new Post(it.getInt("id"), it.getString("name"));
+                    rsl = new Post(
+                            it.getInt("id"),
+                            it.getString("name"),
+                            it.getTimestamp("time").toLocalDateTime()
+                            );
                 }
             }
         } catch (Exception e) {

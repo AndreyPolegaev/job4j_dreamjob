@@ -27,7 +27,8 @@ public class DeleteCandidate extends HttpServlet {
             ServletException, IOException {
         PsqlStore.instOf().deleteCandidate(Integer.parseInt(req.getParameter("id")));
         try {
-            Files.delete(Path.of("C:\\images\\" + req.getParameter("id") + "." + "jpg"));
+            Files.delete(Path.of("C:\\projects\\job4j_dreamjob\\images\\"
+                    + req.getParameter("id") + "." + "jpg"));
         } catch (NoSuchFileException noSuchFileException) {
             LOG.debug("Image doesnt exist in the directory", noSuchFileException);
             noSuchFileException.printStackTrace();

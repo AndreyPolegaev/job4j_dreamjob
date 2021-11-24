@@ -10,22 +10,20 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
+import java.util.Properties;
 
 /**
- * doGet() - Обход папки images,
  * doPost() - загрузка фотографий на сервер
+ * + переименовать файл под id кандидата и привести к формату jpg
  */
-
 public class UploadServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws
             ServletException, IOException {
-        RequestDispatcher dispatcher = req.getRequestDispatcher("candidates.do");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("candidates.jsp");
         dispatcher.forward(req, resp);
     }
 
@@ -38,9 +36,12 @@ public class UploadServlet extends HttpServlet {
         File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
         factory.setRepository(repository);
         ServletFileUpload upload = new ServletFileUpload(factory);
-        try {
+        Properties cfg = new Properties();
+        try (InputStream in = UploadServlet.class.getClassLoader().getResourceAsStream(
+                "photoPath.properties")) {
+            cfg.load(in);
             List<FileItem> items = upload.parseRequest(req);
-            File folder = new File("c:\\images\\");
+            File folder = new File(cfg.getProperty("path"));
             if (!folder.exists()) {
                 folder.mkdir();
             }
@@ -50,10 +51,7 @@ public class UploadServlet extends HttpServlet {
                     try (FileOutputStream out = new FileOutputStream(file)) {
                         out.write(item.getInputStream().readAllBytes());
                     }
-                    /**
-                     * переименовать файл под id кандидата
-                     */
-                    file.renameTo(new File("c:\\images\\" + name + "." + "jpg"));
+                    file.renameTo(new File(cfg.getProperty("path") + name + "." + "jpg"));
                 }
             }
         } catch (FileUploadException e) {

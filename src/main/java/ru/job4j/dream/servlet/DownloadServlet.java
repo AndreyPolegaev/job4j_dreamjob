@@ -4,21 +4,28 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
+import java.util.Properties;
 
 /**
- * скачивание файла с сервера
+ * Обход папки с фотографиями, если имя файла совпадает
+ * с id кандидата то скачиваем (выводим на сайт)
  */
-
 public class DownloadServlet extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws
             ServletException, IOException {
+        Properties cfg = new Properties();
+        try (InputStream in = DownloadServlet.class.getClassLoader().getResourceAsStream(
+                "photoPath.properties")) {
+            cfg.load(in);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         String name = req.getParameter("name");
         File downloadFile = null;
-        for (File file : new File("c:\\images\\").listFiles()) {
+        for (File file : new File(cfg.getProperty("path")).listFiles()) {
             if (file.getName().startsWith(name)) {
                 downloadFile = file;
                 break;

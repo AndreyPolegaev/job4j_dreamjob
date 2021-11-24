@@ -19,6 +19,14 @@
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Работа мечты</title>
+    <style>
+        body {
+            padding: 30px;
+            background-image: url('https://catherineasquithgallery.com/uploads/posts/2021-02/1613405883_169-p-fon-dlya-storis-bezhevii-gradient-188.jpg');
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    </style>
 </head>
 <body>
 <div class="container pt-3">

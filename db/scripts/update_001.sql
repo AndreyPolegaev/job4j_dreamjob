@@ -1,26 +1,35 @@
-CREATE TABLE IF NOT EXISTS post
-(
-    id   SERIAL PRIMARY KEY,
-    name TEXT
-);
-
-CREATE TABLE IF NOT EXISTS candidates
-(
-    id   SERIAL PRIMARY KEY,
-    name TEXT
-);
-
-CREATE TABLE IF NOT EXISTS users
+CREATE TABLE if not exists post
 (
     id   SERIAL PRIMARY KEY,
     name TEXT,
-    email TEXT,
+    time timestamp
+);
+
+CREATE TABLE if not exists cities
+(
+    id   SERIAL PRIMARY KEY,
+    name TEXT
+);
+
+CREATE TABLE if not exists candidates
+(
+    id      SERIAL PRIMARY KEY,
+    name    TEXT,
+    time    timestamp,
+    city_fk int references cities(id)
+);
+
+CREATE TABLE if not exists users
+(
+    id       SERIAL PRIMARY KEY,
+    name     TEXT,
+    email    TEXT,
     password TEXT
 );
 
--- drop table users;
--- drop table candidates;
--- drop table post;
--- select *from post;
--- select *from users;
--- delete from post;
+insert into cities (name) values
+('Moscow'),
+('New York'),
+('London'),
+('Berlin'),
+('Parish');
